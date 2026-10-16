@@ -1,0 +1,54 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
+# vim: set ft=toml :
+#
+# https://mise.jdx.dev/tasks/task-configuration.html
+
+
+['pixi:preflight']
+description = 'Execute Pixi pre-flight checks and commands.'
+hide = true
+run = [
+  # Cache Directory Tagging Specification: https://bford.info/cachedir/
+  'mkdir -p -- "$(dirname -- {{ vars.CACHEDIR_TAG | quote }})"',
+  'printf %s "Signature: 8a477f597d28d172789f06886806bc55" > {{ vars.CACHEDIR_TAG | quote }}',
+]
+shell = 'sh -euo pipefail -c'
+skip_if = 'test -e {{ vars.CACHEDIR_TAG | quote }}'
+vars.CACHEDIR_TAG = '.pixi/CACHEDIR.TAG'
+
+
+['pixi:exec']
+description = 'Run a command and install it in a temporary Pixi environment.'
+depends = [
+  'pixi:preflight',
+]
+run = 'pixi exec'
+shell = 'sh -euo pipefail -c'
+
+
+['pixi:install']
+description = """\
+Install a Pixi environment, both updating the lock file and installing the environment."""
+depends = [
+  'pixi:preflight',
+]
+run = 'pixi install'
+shell = 'sh -euo pipefail -c'
+
+
+['pixi:run']
+description = 'Run Pixi task in the Pixi environment.'
+depends = [
+  'pixi:preflight',
+]
+run = 'pixi run'
+shell = 'sh -euo pipefail -c'
+
+
+['pixi:update']
+description = 'Update Pixi dependencies to newer compatible versions.'
+depends = [
+  'pixi:preflight',
+]
+run = 'pixi update'
+shell = 'sh -euo pipefail -c'

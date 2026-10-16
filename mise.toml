@@ -1,0 +1,52 @@
+#:schema https://mise.jdx.dev/schema/mise.json
+# vim: set ft=toml :
+#
+# https://mise.jdx.dev/configuration.html
+
+
+# Ensure skip_if is supported.
+# https://mise.jdx.dev/tasks/task-configuration.html#skip-if
+# https://github.com/jdx/mise/releases/tag/v2026.10.10
+min_version = '2026.10.10'
+
+
+[hooks]
+postinstall = [{ task = 'hooks-install' }]
+
+
+[settings]
+experimental = true
+locked = true
+lockfile = true
+lockfile_platforms = ['linux-arm64', 'linux-x64', 'macos-arm64']
+
+
+[task_config]
+shell = 'sh -euo pipefail -c'
+
+
+[tasks.hooks-install]
+hide = true
+run = [{ task = 'hooks-uninstall' }, 'hk install --mise']
+
+[tasks.hooks-uninstall]
+hide = true
+run = 'hk uninstall'
+
+[tasks.lint]
+alias = 'default'
+run = 'hk fix --all'
+
+[tasks.lock]
+# required to correctly initialize lockfile when locked = true
+env.MISE_LOCKED = '0'
+run = ['mise install', 'mise lock']
+
+[tasks.upgrade]
+# required to correctly initialize lockfile when locked = true
+env.MISE_LOCKED = '0'
+run = ['mise upgrade --local', 'mise lock']
+
+
+[tools]
+hk = 'latest'

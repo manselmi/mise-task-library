@@ -1,0 +1,34 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
+# vim: set ft=toml :
+#
+# https://mise.jdx.dev/tasks/task-configuration.html
+
+
+['launchd:bootout']
+description = 'Remove launchd service definition from domain.'
+run = 'launchctl bootout {{ vars.LAUNCHD_SERVICE_TARGET | quote }}'
+shell = 'sh -euo pipefail -c'
+skip_if = """\
+STATUS=0; \
+launchctl print {{ vars.LAUNCHD_SERVICE_TARGET | quote }} > /dev/null 2>&1 || STATUS="${?}"; \
+test "${STATUS}" -ne 0"""
+
+
+['launchd:bootstrap']
+description = 'Bootstrap launchd service definition into domain.'
+run = 'launchctl bootstrap {{ vars.LAUNCHD_DOMAIN_TARGET | quote }} {{ vars.LAUNCHD_SERVICE_PATH | quote }}'
+shell = 'sh -euo pipefail -c'
+
+
+['launchd:kickstart']
+description = 'Run launchd service immediately, regardless of configured launch conditions.'
+run = 'launchctl kickstart {{ vars.LAUNCHD_SERVICE_TARGET | quote }}'
+shell = 'sh -euo pipefail -c'
+
+
+['launchd:reload']
+description = 'Remove and then bootstrap launchd service definition from/to domain.'
+run = [
+  { task = 'launchd:bootout' },
+  { task = 'launchd:bootstrap' },
+]
