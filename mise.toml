@@ -4,10 +4,10 @@
 # https://mise.jdx.dev/configuration.html
 
 
-# Ensure skip_if is supported.
-# https://mise.jdx.dev/tasks/task-configuration.html#skip-if
-# https://github.com/jdx/mise/releases/tag/v2026.10.10
-min_version = '2026.10.10'
+# `mise fmt` no longer breaks multiline inline tables (TOML 1.1).
+# https://github.com/jdx/mise/pull/14670
+# https://github.com/jdx/mise/releases/tag/v2026.10.15
+min_version = '2026.10.15'
 
 
 [hooks]
