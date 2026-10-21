@@ -4,10 +4,10 @@
 # https://mise.jdx.dev/configuration.html
 
 
-# `mise fmt` no longer breaks multiline inline tables (TOML 1.1).
-# https://github.com/jdx/mise/pull/14670
-# https://github.com/jdx/mise/releases/tag/v2026.10.15
-min_version = '2026.10.15'
+# Removes trust in the compromised eMudhra CA certificates.
+# https://github.com/jdx/mise/pull/14781
+# https://github.com/jdx/mise/releases/tag/v2026.10.17
+min_version = '2026.10.17'
 
 
 [hooks]
@@ -15,7 +15,6 @@ postinstall = [{ task = 'hooks-install' }]
 
 
 [settings]
-experimental = true
 locked = true
 lockfile = true
 lockfile_platforms = ['linux-arm64', 'linux-x64', 'macos-arm64']
